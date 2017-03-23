@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.jason.cameraplugin"
+    version="1.0.0">
+    <name>CameraPlugin</name>
+
+    <dependency id="cordova-plugin-compat" version="^1.0.0" />
+
+    <js-module src="www/CameraConstants.js" name="Camera">
+        <clobbers target="Camera" />
+    </js-module>
+
+    <js-module src="www/CameraPopoverOptions.js" name="CameraPopoverOptions">
+        <clobbers target="CameraPopoverOptions" />
+    </js-module>
+
+
+    <js-module src="www/Camera.js" name="camera">
+        <clobbers target="navigator.camera" />
+    </js-module>
+
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Camera">
+                <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.CAMERA" />
+            <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity 
+                android:label="ForegroundCameraPlugin" 
+                android:name="org.apache.cordova.camera.CameraActivity" 
+                android:screenOrientation="portrait" 
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            </activity>
+        </config-file>
+		
+		<source-file src="src/android/CameraActivity.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/CameraPreview.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/CameraLauncher.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/ExifHelper.java" target-dir="src/org/apache/cordova/camera" />
+		<source-file src="src/android/SquareLinearLayout.java" target-dir="src/org/apache/cordova/camera" />
+		<source-file src="src/android/cameraplugin.xml" target-dir="res/layout" />
+		<source-file src="src/android/cross.png" target-dir="res/drawable" />
+		<source-file src="src/android/shutter.png" target-dir="res/drawable" />
+		
+        <js-module src="www/CameraPopoverHandle.js" name="CameraPopoverHandle">
+            <clobbers target="CameraPopoverHandle" />
+        </js-module>
+
+     </platform>
+
+     <!-- ios -->
+     <platform name="ios">
+         <config-file target="config.xml" parent="/*">
+             <feature name="Camera">
+                 <param name="ios-package" value="CDVCamera" />
+             </feature>
+             <preference name="CameraUsesGeolocation" value="false" />
+         </config-file>
+
+         <js-module src="www/ios/CameraPopoverHandle.js" name="CameraPopoverHandle">
+            <clobbers target="CameraPopoverHandle" />
+         </js-module>
+
+         <header-file src="src/ios/UIImage+CropScaleOrientation.h" />
+         <source-file src="src/ios/UIImage+CropScaleOrientation.m" />
+         <header-file src="src/ios/CDVCamera.h" />
+         <source-file src="src/ios/CDVCamera.m" />
+         <header-file src="src/ios/CDVJpegHeaderWriter.h" />
+         <source-file src="src/ios/CDVJpegHeaderWriter.m" />
+         <header-file src="src/ios/CDVExif.h" />
+         <framework src="ImageIO.framework" weak="true" />
+         <framework src="CoreLocation.framework" />
+         <framework src="CoreGraphics.framework" />
+         <framework src="AssetsLibrary.framework" />
+         <framework src="MobileCoreServices.framework" />
+         <framework src="CoreGraphics.framework" />
+         <framework src="AVFoundation.framework" />
+
+         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+             <string></string>
+         </config-file>
+
+     </platform>
+
+
+
+</plugin>
